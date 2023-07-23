@@ -17,7 +17,7 @@ Projects inside the repository are:
 Clone the project
 
 ```bash
-  git clone https://github.com/pedrolopezbiedma/NestJS_Training
+  git clone https://github.com/pedrolopezbiedma/NestJS_Training.git
 ```
 
 Go to the project directory
