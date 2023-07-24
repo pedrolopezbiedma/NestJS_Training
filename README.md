@@ -8,9 +8,11 @@ Repository created following the following courses to learn NestJS:
 
 Projects inside the repository are:
 
-- **user-api**: App created to gain some basic knowledge of NestJS
-
 - **ninja-api**: App created to gain some basic & more advanced knowledge of NestJS
+
+- **user-api**: App created to gain some & more advanced knowledge of NestJS
+
+- **udemy-course/scratch**
 
 ## Run Locally
 
