@@ -12,7 +12,11 @@ Projects inside the repository are:
 
 - **user-api**: App created to gain some & more advanced knowledge of NestJS
 
-- **udemy-course/scratch**
+- **udemy-course/scratch**: App created to gain some pretty basics understanding on how NestJS works under the hood.
+
+- **udemy-course/messages**: App created to practice the main concepts of Nest and introducing dependency injection.
+
+- **udemy-course/di**: App created to dig a bit more into the dependency injection topic.
 
 ## Run Locally
 

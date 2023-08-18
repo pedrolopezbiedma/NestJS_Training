@@ -14,7 +14,7 @@ export class MessageRepository {
   async createMessage(messageContent: string) {
     const messages = await this.readFile();
     const id = Math.floor(Math.random() * 999);
-    messages[id] = { id, messageContent };
+    messages[id] = { id, content: messageContent };
     await this.writeFile(messages);
     return 'New message created with id: ' + id;
   }
