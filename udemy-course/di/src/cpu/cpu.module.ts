@@ -1,4 +1,7 @@
 import { Module } from '@nestjs/common';
+import { PowerModule } from 'src/power/power.module';
 
-@Module({})
+@Module({
+  imports: [PowerModule],
+})
 export class CpuModule {}
