@@ -1,2 +1,103 @@
-- Create a new project.
-    
+
+- 34.
+    - We use now the Power module within the CPu module, to use the Power service - supplyPower within the cpu service
+
+- 35.
+    - Define method compute within cpu that will take 2 numbers, we sumarize it and return it. Also call the supplyPower 10
+    - Inject the power module within the disk module
+    - ALso, in the disk service, create a getData que haga un console log y llama al supplyPower con 20.
+        - Devolver data en el metodo.
+
+- 36.
+    - Use the CpuService & DiskService within the Computer module & controller.
+    - Create a run route handler that calls the injected services.
+    - Test everything
+- 37.
+    - Nothing
+- 38
+    - Nothing
+- 39
+    - Generate new project carvalue-assistant
+        - README --> Poner esto bonito porque va a ser el proyecto grande.
+                    Authentication as Users can sign up with email/password. 
+                    They will get an estimate for how much their card is worth base on some parameters.
+                    Users could report what they have sold their car.
+                    There will be admin to approve reported sales.
+- 40
+    - Nothing
+- 41
+    - Create Users module, users controller, users service.
+    - Create Reports module, reports controller, reports service.
+- 42
+    - Install @nestjs/typeorm typeorm sqlite3 dependencies
+- 43
+    - Create the TypeORM connection to SQ lite
+        - Inside app.module, import TypeOrmModule from @nestjs/typeorm
+            - Then, in imports, we include TypeOrmModule.forRoot({ type: 'sqlite', database: 'db.sqlite', entities: [], synchronize: true })
+- 44
+    - Create Entities files for Users
+        - Create user.entity
+            - Import Entity, Column, PrimaryGeneratedColumn from 'typeorm'
+
+            -   @Entity()
+                export class User {
+                @PrimaryGeneratedColumn() id: number, @Column() email: string, @Column() password: string
+            }
+        - Connect the entity to the module
+            Import TypeOrmModule Y the User entity
+            In the imports, we use the TypeOrmModule.forFeature([User Entity])
+        - Include the user entity within the AppModule entities array in the sqlite connection
+- 45 
+    - Create the same thing for Reports
+        Report { PGC id: number, C price: number }
+        Install VSCode Extension called SqLite and install it, use it with CMD + Shift + P
+- 46
+    - Nothing
+- 47
+    - Nothing
+- 48
+    - Nothing
+- 49
+    - Create a new route to create user ( Post - /signup, Body{ email & password } ) --> Update 'users' to 'auth'
+        - Create a dto ( UserDto ) and ensure that email is email & password is string and set up validation ( with whitelist: true )
+- 50
+    - Test that everything is working correctly
+- 51
+    - Going to set up dependency between the 'repository' from typeorm and the users service. For that, in the users service:
+        - Import Repository from typorm
+        - InjectRepository from nestjs/typeorm
+        - User entity which is the one that will be in touch here.
+        - To create the dependency, in the constructor: constructor(@InjectRepository(User) private repo: Repository<User>){}
+        - Now, we create the signup method, with an email & password
+            - First we create the instance of the user: const user = this.repo.create({ email, password })  
+            - Then we persist the user into the db, RETURN!!!!! this.repo.save(user)
+        - Use the method in the controller with DI
+- 52
+    - Nothing.
+- 53
+    - Nothing.
+- 54
+    - Now, in the users service, we are going to define:
+        - getUserById(userId: number){
+            return this.repo.findOneBy({ userId })
+        }
+        - getUserByEmail(email: string){
+            return this.repo.find({ where: { email } })
+        }
+- 55
+    - async updateUser(id: number, attributes: Partial<User>){
+        const user = await this.getUserById(id)
+        if(!user){
+            throw new Error('User not found')
+        }
+        Object.assign(user, attributes)
+        return this.repo.save(user);
+    }
+- 56
+    - async removeUser(id: number) {
+        const user = await this.getUserById(id)
+        if(!user){
+            throw new Error('User not found')
+        }
+        return this.repo.remove(user);
+    }
