@@ -5,7 +5,9 @@ import { PowerService } from 'src/power/power.service';
 export class CpuService {
   constructor(private powerService: PowerService) {}
 
-  getPower(): void {
-    return this.powerService.supplyPower(20);
+  compute(num1: number, num2: number): number {
+    const sum = num1 + num2;
+    this.powerService.supplyPower(sum);
+    return sum;
   }
 }

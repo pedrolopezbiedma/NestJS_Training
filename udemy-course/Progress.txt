@@ -1,13 +1,4 @@
 
-- 34.
-    - We use now the Power module within the CPu module, to use the Power service - supplyPower within the cpu service
-
-- 35.
-    - Define method compute within cpu that will take 2 numbers, we sumarize it and return it. Also call the supplyPower 10
-    - Inject the power module within the disk module
-    - ALso, in the disk service, create a getData que haga un console log y llama al supplyPower con 20.
-        - Devolver data en el metodo.
-
 - 36.
     - Use the CpuService & DiskService within the Computer module & controller.
     - Create a run route handler that calls the injected services.
