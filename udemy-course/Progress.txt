@@ -1,44 +1,11 @@
-- 49
-    - Create a new route to create user ( Post - /signup, Body{ email & password } ) --> Update 'users' to 'auth'
-        - Create a dto ( UserDto ) and ensure that email is email & password is string and set up validation ( with whitelist: true )
-- 50
-    - Test that everything is working correctly
-- 51
-    - Going to set up dependency between the 'repository' from typeorm and the users service. For that, in the users service:
-        - Import Repository from typorm
-        - InjectRepository from nestjs/typeorm
-        - User entity which is the one that will be in touch here.
-        - To create the dependency, in the constructor: constructor(@InjectRepository(User) private repo: Repository<User>){}
-        - Now, we create the signup method, with an email & password
-            - First we create the instance of the user: const user = this.repo.create({ email, password })  
-            - Then we persist the user into the db, RETURN!!!!! this.repo.save(user)
-        - Use the method in the controller with DI
-- 52
-    - Nothing.
-- 53
-    - Nothing.
-- 54
-    - Now, in the users service, we are going to define:
-        - getUserById(userId: number){
-            return this.repo.findOneBy({ userId })
-        }
-        - getUserByEmail(email: string){
-            return this.repo.find({ where: { email } })
-        }
-- 55
-    - async updateUser(id: number, attributes: Partial<User>){
-        const user = await this.getUserById(id)
-        if(!user){
-            throw new Error('User not found')
-        }
-        Object.assign(user, attributes)
-        return this.repo.save(user);
-    }
-- 56
-    - async removeUser(id: number) {
-        const user = await this.getUserById(id)
-        if(!user){
-            throw new Error('User not found')
-        }
-        return this.repo.remove(user);
-    }
+- 58
+    - Vamos a añadir al controller la llamada para coger a un usuario por id. /auth/:id
+    - Vamos a añadir tambien la llamada para coger un user por email /auth?email=:email
+- 59
+    - Vamos a añadir tambien la llamada para remove un user. /auth/:id
+- 60
+    - Vamos a añadir tambien la llamada para update un user. /auth/:id
+        - Creamos un dto para update y validamos.
+            - Que email sea email, que password sea string. Usamos isOptional en ambos para señalar que puede que no vengan.
+- 61
+    
