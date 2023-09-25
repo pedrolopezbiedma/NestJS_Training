@@ -1,28 +1,2 @@
-- 71
-    - Vamos a crear un Authentication service, y lo vamos a usar dentro del Users controller
-- 72
-    - Vamos a crear un metodo checkSignup y checkSignIn ( Revisar bien los nombres de los metodos )
-    - dentro de signup
-        - Comprobamos si el email ya esta en uso: Si lo esta, devolvemos un error throw new BadRequestException('Email already being used')
-        - Si no, video 74.
-- 73
-    - Nada
-- 74
-    import { randomBytes, scrypt as _scrypt } from 'crypto'
-    import { promisify } from 'util'
 
-    //  To make this return promises and better deal with it
-    const scrypt = promisify(_scrypt)
-
-    - // Generate a salt
-        const salt = randomBytes(8).toString('hex')
-    - // Hash the salt and the password together.
-        const hashPassword = (await scrypt(password, salt, 32)) as Buffer
-    - // Join the hashed result and the salt together.
-        const result = salt + '.' + hashPassword.toString('hex')
-- 75
-    - ahora, usamos el users service para llamar al create con result
-    - Devolvemos el new user.
-    - Actualizarmos el user controller para llamar a este metodo en vez de al users service.
-    - Testeamos
-
+ 

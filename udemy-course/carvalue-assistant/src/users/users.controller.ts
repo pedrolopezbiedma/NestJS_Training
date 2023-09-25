@@ -27,7 +27,6 @@ export class UsersController {
   @Post('/signup')
   signupUser(@Body() body: CreateUserDto) {
     console.log('signupUser with body -->, ', body);
-    this.checkEmailExisting(body.email);
     return this.authenticationService.handleSignup(body.email, body.password);
   }
 
@@ -54,12 +53,5 @@ export class UsersController {
   updateUser(@Param('id') userId: number, @Body() body: UpdateUserDto) {
     console.log('updateUser with id --> ', userId, ' and body -->', body);
     this.userService.updateUser(userId, body);
-  }
-
-  private checkEmailExisting(email: string): void {
-    const user = this.userService.getUserByEmail(email);
-    if (user) {
-      throw new BadRequestException('Email already being used.');
-    }
   }
 }
