@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -25,10 +24,18 @@ export class UsersController {
     private userService: UsersService,
   ) {}
 
+  @Get('/session')
+  getUserSession(@Session() session) {
+    return session.userId;
+  }
+
   @Post('/signup')
   async signupUser(@Body() body: CreateUserDto, @Session() session) {
     console.log('signupUser with body -->, ', body);
-    const user = await this.authenticationService.handleSignup(body.email, body.password);
+    const user = await this.authenticationService.handleSignup(
+      body.email,
+      body.password,
+    );
     session.userId = user.id;
     return user;
   }
@@ -36,9 +43,19 @@ export class UsersController {
   @Post('signin')
   async signinUser(@Body() body: CreateUserDto, @Session() session) {
     console.log('signupUser with body -->, ', body);
-    const user = await this.authenticationService.handleSignin(body.email, body.password);
+    const user = await this.authenticationService.handleSignin(
+      body.email,
+      body.password,
+    );
     session.userId = user.id;
     return user;
+  }
+
+  @Post('/logout')
+  logoutUser(@Session() session) {
+    session.userId = null;
+    return session;
+  }
 
   // @Serialize(PlainUserDto) Example of how we could use the Serialize just with one route
   @Get('/:id')

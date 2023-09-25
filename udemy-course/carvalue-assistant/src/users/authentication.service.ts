@@ -41,6 +41,8 @@ export class AuthenticationService {
 
   private async checkEmailNotExisting(email: string): Promise<User> {
     const user = await this.userService.getUserByEmail(email);
+    console.log('User is -->', user);
+
     if (user.length === 0) {
       throw new NotFoundException('There is no user with that email.');
     }
