@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -7,23 +8,27 @@ import {
   Patch,
   Post,
   Query,
-  UseInterceptors,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PlainUserDto } from 'src/users/dto/plain-user.dto';
 import { Serialize } from 'src/interceptors/serialize-password.interceptor';
+import { AuthenticationService } from './authentication.service';
 
 @Serialize(PlainUserDto)
 @Controller('auth')
 export class UsersController {
-  constructor(private userService: UsersService) {}
+  constructor(
+    private authenticationService: AuthenticationService,
+    private userService: UsersService,
+  ) {}
 
   @Post('/signup')
   signupUser(@Body() body: CreateUserDto) {
-    console.log('El body es -->, ', body);
-    return this.userService.signupUser(body.email, body.password);
+    console.log('signupUser with body -->, ', body);
+    this.checkEmailExisting(body.email);
+    return this.authenticationService.handleSignup(body.email, body.password);
   }
 
   // @Serialize(PlainUserDto) Example of how we could use the Serialize just with one route
@@ -49,5 +54,12 @@ export class UsersController {
   updateUser(@Param('id') userId: number, @Body() body: UpdateUserDto) {
     console.log('updateUser with id --> ', userId, ' and body -->', body);
     this.userService.updateUser(userId, body);
+  }
+
+  private checkEmailExisting(email: string): void {
+    const user = this.userService.getUserByEmail(email);
+    if (user) {
+      throw new BadRequestException('Email already being used.');
+    }
   }
 }
