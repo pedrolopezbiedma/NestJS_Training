@@ -8,6 +8,7 @@ import {
   Patch,
   Post,
   Query,
+  Session,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -25,16 +26,19 @@ export class UsersController {
   ) {}
 
   @Post('/signup')
-  signupUser(@Body() body: CreateUserDto) {
+  async signupUser(@Body() body: CreateUserDto, @Session() session) {
     console.log('signupUser with body -->, ', body);
-    return this.authenticationService.handleSignup(body.email, body.password);
+    const user = await this.authenticationService.handleSignup(body.email, body.password);
+    session.userId = user.id;
+    return user;
   }
 
   @Post('signin')
-  signinUser(@Body() body: CreateUserDto) {
+  async signinUser(@Body() body: CreateUserDto, @Session() session) {
     console.log('signupUser with body -->, ', body);
-    return this.authenticationService.handleSignin(body.email, body.password);
-  }
+    const user = await this.authenticationService.handleSignin(body.email, body.password);
+    session.userId = user.id;
+    return user;
 
   // @Serialize(PlainUserDto) Example of how we could use the Serialize just with one route
   @Get('/:id')
