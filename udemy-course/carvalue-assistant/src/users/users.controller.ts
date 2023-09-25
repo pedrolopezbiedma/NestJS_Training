@@ -30,6 +30,12 @@ export class UsersController {
     return this.authenticationService.handleSignup(body.email, body.password);
   }
 
+  @Post('signin')
+  signinUser(@Body() body: CreateUserDto) {
+    console.log('signupUser with body -->, ', body);
+    return this.authenticationService.handleSignin(body.email, body.password);
+  }
+
   // @Serialize(PlainUserDto) Example of how we could use the Serialize just with one route
   @Get('/:id')
   getUser(@Param('id') userId: number) {
