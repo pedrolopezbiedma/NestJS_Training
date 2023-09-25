@@ -1,4 +1,9 @@
-import { NestInterceptor, ExecutionContext, CallHandler } from '@nestjs/common';
+import {
+  NestInterceptor,
+  ExecutionContext,
+  CallHandler,
+  UseInterceptors,
+} from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 import { Observable, map } from 'rxjs';
 
@@ -20,4 +25,8 @@ export class SerializePasswordInterceptor implements NestInterceptor {
       }),
     );
   }
+}
+
+export function Serialize(dto: any) {
+  return UseInterceptors(new SerializePasswordInterceptor(dto));
 }
