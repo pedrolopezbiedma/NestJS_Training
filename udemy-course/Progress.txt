@@ -1,9 +1,3 @@
-- 59
-    - Vamos a añadir tambien la llamada para remove un user. /auth/:id
-- 60
-    - Vamos a añadir tambien la llamada para update un user. /auth/:id
-        - Creamos un dto para update y validamos.
-            - Que email sea email, que password sea string. Usamos isOptional en ambos para señalar que puede que no vengan.
 - 61
     - En vez de tirar new Error, vamos a tirar notfoundexception
     - Testeamos todo
