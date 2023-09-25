@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update.user-dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 import { SerializePasswordInterceptor } from 'src/interceptors/serialize-password.interceptor';
 
 @Controller('auth')
