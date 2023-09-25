@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UsersService } from './users.service';
 
@@ -14,13 +22,19 @@ export class UsersController {
 
   @Get('/:id')
   getUser(@Param('id') userId: number) {
-    console.log('getUserById con id -->', userId);
+    console.log('getUserById with id -->', userId);
     return this.userService.getUserById(userId);
   }
 
   @Get()
   getUserByEmail(@Query('email') userEmail: string) {
-    console.log('getUserByEmail con email -->', userEmail);
+    console.log('getUserByEmail with email -->', userEmail);
     return this.userService.getUserByEmail(userEmail);
+  }
+
+  @Delete('/:id')
+  removeUser(@Param('id') userId: number) {
+    console.log('removeUSer with id -->', userId);
+    return this.userService.removeUser(userId);
   }
 }
