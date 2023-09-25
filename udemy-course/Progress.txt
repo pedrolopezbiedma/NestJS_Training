@@ -1,13 +1,3 @@
-- 65
-    - Creamos un nuevo dto ( user ) con id y email y les ponemos el Expose de class-transformer
-    - Ahora, en el interceptor, dentro del map:
-        - return plainToClass(UserDto, data, { excludeExtraneousValues: true })
-    - Testeamos ahora que el password no sale cuando pedimos un usuario ( y entendemos el flujo de informacion con los console.log )
-- 66
-    - Ahora, en el interceptor, vamos a crear un constructor.
-        - Dentro del constructor vamos a poner private dto: any y lo vamos a usar dentro del plainToClass
-        - Vamos a poner comentarios para explicar esto
-        - En el controller vamos a cambiar como se usa el interceptor --> new SerializeInterceptor(UserDto))
 - 67
     - Ahora en el interceptor vamos a declarar una funcion que se llame Serialize(dto: any){
         return UseInterceptors(new SerializeInterceptor(dto))
