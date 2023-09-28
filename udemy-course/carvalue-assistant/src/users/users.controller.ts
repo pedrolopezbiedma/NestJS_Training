@@ -8,6 +8,7 @@ import {
   Post,
   Query,
   Session,
+  UseInterceptors,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -15,7 +16,10 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { PlainUserDto } from 'src/users/dto/plain-user.dto';
 import { Serialize } from 'src/interceptors/serialize-password.interceptor';
 import { AuthenticationService } from './authentication.service';
+import { CurrentUserInterceptor } from './interceptors/current-user.interceptor';
+import { CurrentUser } from './decorators/current-user.decorator';
 
+@UseInterceptors(CurrentUserInterceptor)
 @Serialize(PlainUserDto)
 @Controller('auth')
 export class UsersController {
@@ -25,7 +29,8 @@ export class UsersController {
   ) {}
 
   @Get('/session')
-  getUserSession(@Session() session) {
+  getUserSession(@CurrentUser() userCookie, @Session() session) {
+    console.log('userCookie --> ', userCookie);
     return session.userId;
   }
 
