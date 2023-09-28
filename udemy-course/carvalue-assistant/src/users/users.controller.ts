@@ -8,7 +8,7 @@ import {
   Post,
   Query,
   Session,
-  UseInterceptors,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -16,11 +16,11 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { PlainUserDto } from 'src/users/dto/plain-user.dto';
 import { Serialize } from 'src/interceptors/serialize-password.interceptor';
 import { AuthenticationService } from './authentication.service';
-import { CurrentUserInterceptor } from './interceptors/current-user.interceptor';
 import { CurrentUser } from './decorators/current-user.decorator';
+import { AuthGuard } from './guards/auth.guard';
 
-@UseInterceptors(CurrentUserInterceptor)
-@Serialize(PlainUserDto)
+@Serialize(PlainUserDto) // Use a interceptor in a stylish way, for the whole controller.
+// @UseInterceptors(CurrentUserInterceptor) // Use an interceptor in the regular way, for the whole controller. Instead of declaring it here, we will declare it globally within the module.
 @Controller('auth')
 export class UsersController {
   constructor(
@@ -29,14 +29,16 @@ export class UsersController {
   ) {}
 
   @Get('/session')
+  // @UseInterceptors(CurrentUserInterceptor) // Use an interceptor in the regular way, just for one route handler.
+  @UseGuards(AuthGuard)
   getUserSession(@CurrentUser() userCookie, @Session() session) {
-    console.log('userCookie --> ', userCookie);
+    console.log('GET userCookie --> ', userCookie);
     return session.userId;
   }
 
   @Post('/signup')
   async signupUser(@Body() body: CreateUserDto, @Session() session) {
-    console.log('signupUser with body -->, ', body);
+    console.log('POST signupUser with body -->, ', body);
     const user = await this.authenticationService.handleSignup(
       body.email,
       body.password,
@@ -62,7 +64,7 @@ export class UsersController {
     return session;
   }
 
-  // @Serialize(PlainUserDto) Example of how we could use the Serialize just with one route
+  // @Serialize(PlainUserDto) Example of how we could use the Serialize for just one route
   @Get('/:id')
   getUser(@Param('id') userId: number) {
     console.log('getUserById with id -->', userId);
