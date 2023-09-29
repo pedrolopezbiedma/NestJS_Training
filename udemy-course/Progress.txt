@@ -1,0 +1,38 @@
+
+- 96:
+    - Vamos a hacer el test del signup.
+    - Comprobamos que el password del user no es el que especificamos
+    - Comprobamos que salt y hash estan defined separando password por un punto.
+
+- 97:
+    Comprobarlo tras hacer el 98
+
+- 98:
+    - Creamos el test para el signup en el que hay un email
+    - Como necesitamos que el find ( o como lo hayas llamado tu ) se comporte diferente, en vez de declarar fakeUserService dentro del beforeEach, vamos a crear
+    la variable fuera, como el service, y dentro del before each la vas a asignar ( como si fuese un valor por defecto)
+    - Y entonces, dentro del test, a la varuable fakeUSerService le vas a decir fakeUserService.find = () => Promise.resolve([{ id:1, email: 'a', password: '1'}])
+    - Añadimos tb (done) en la definicion del test y:
+        Video 98
+
+- 99:
+    - Hacer tras el 100:
+
+- 100:
+    - Vamos a hacer el test de not found en el sign in como el anterior pero bien
+
+- 101:
+    - Hacer tras el 102:
+
+- 102:
+    - Hacemos el test de wrong credentials en el sign in pero bien
+    - Hacemos el test de que todo vaya bien poniendo un password de verdad en el mock
+
+- 106:
+    - Vamos a hacer el set up del users.controller.spec.ts, crear los mocks aunque dejarlos vacios.
+
+-107:
+    - Seguimos haciendo los tests de users.controller
+
+-110: 
+    - 

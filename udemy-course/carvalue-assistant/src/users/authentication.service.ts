@@ -10,13 +10,13 @@ import { User } from './user.entity';
 
 @Injectable()
 export class AuthenticationService {
-  constructor(private userService: UsersService) {}
+  constructor(private usersService: UsersService) {}
 
   async handleSignup(email: string, password: string) {
     const user = await this.checkEmailExisting(email);
     const encryptedPassword = await this.encryptPassword(password);
 
-    return this.userService.signupUser(email, encryptedPassword);
+    return this.usersService.signupUser(email, encryptedPassword);
   }
 
   async handleSignin(email: string, password: string) {
@@ -32,7 +32,7 @@ export class AuthenticationService {
   }
 
   private async checkEmailExisting(email: string): Promise<User> {
-    const user = await this.userService.getUserByEmail(email);
+    const user = await this.usersService.getUserByEmail(email);
     if (user.length > 0) {
       throw new BadRequestException('Email already being used.');
     }
@@ -40,7 +40,7 @@ export class AuthenticationService {
   }
 
   private async checkEmailNotExisting(email: string): Promise<User> {
-    const user = await this.userService.getUserByEmail(email);
+    const user = await this.usersService.getUserByEmail(email);
 
     if (user.length === 0) {
       throw new NotFoundException('There is no user with that email.');
