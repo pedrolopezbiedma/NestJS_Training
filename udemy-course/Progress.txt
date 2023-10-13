@@ -1,21 +1,4 @@
 
-- 122:
-    - Vamos a crear un beforeEach global para todos los e2e
-    - Para ello nos vamos a ir a jest-e2e.json y añadimos al final: 'setupFilesAfterEnv': ["<rootDir>/setup.ts"]
-        - Creamos un setup.ts y ponemos:
-            rm from fs/promises
-            join from path
-
-            global.beforeEach( async( => {
-                try
-
-                await rm(join(__dirname, '..', 'test.sqlite'))
-
-                catch // No handling of the error
-
-            }))
-- 123:
-    - Nada
 
 - 124:
     - Nada
