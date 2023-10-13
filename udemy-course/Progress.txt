@@ -1,0 +1,184 @@
+
+- 122:
+    - Vamos a crear un beforeEach global para todos los e2e
+    - Para ello nos vamos a ir a jest-e2e.json y añadimos al final: 'setupFilesAfterEnv': ["<rootDir>/setup.ts"]
+        - Creamos un setup.ts y ponemos:
+            rm from fs/promises
+            join from path
+
+            global.beforeEach( async( => {
+                try
+
+                await rm(join(__dirname, '..', 'test.sqlite'))
+
+                catch // No handling of the error
+
+            }))
+- 123:
+    - Nada
+
+- 124:
+    - Nada
+
+- 125:
+    - Añadimos propiedades al report entity: brand (string), model(string), year(number), latitude(number), latitude(number), mileage(number)
+
+- 126:
+    - Vamos a crear un nuevo route handler para crear un report, que tenga un CreateReport.dto.ts, creamos el dto y definimos sus propiedades
+        pero no sus validators.
+
+- 126 & 127:
+    - brand & mdoel --> Que sean string
+    - year --> number & minimo 1900 y maximo 2500
+    - mileage --> number & minimo 0 y maximo 1000000
+    - longitud & latitude --> IsLongitud & latitude
+    - price --> number & min 0 & max 1000000
+    - Usamos el dto en el controller.
+    - Enchufamos nuesto servicio en el controller.
+    - Hacemos que solo usuarios que esten autenticados puedan usar este route handler
+    - Llamamos a la funcion create del servicio.
+
+- 128
+    - Obtenemos acceso al repository de reports en el reports service.
+    - Hacemos el metodo create y guardamos el report en la database.
+
+- 129:
+    Test la creacion de reports.
+    
+- 130:
+    - Queremos relacionar la creacion de reports con el usuario que los crea.
+    - Nada
+
+-131: 
+    - Nada
+
+- 132:
+    - En el entity de user, vamos a usar el decorator de one to many para crear una propiedad que se llame reports y que sea de topo Report[]
+    - Como parametros para el OneToMany, vamos a usar: OneToMany(() => Report, (report) => report.user)
+    - Ahora vamos a ir al report entity, y vamos a poner un campo nuevo que se llame user: User, con el decorator ManyToOne(() => User, (user) => user.reports)
+
+-133:
+    - Borra la base de datos y haz un sign up para crearla de nuevo
+
+- 134:
+    - Nada
+
+- 135:
+    - En el controller, vamos a usar el decorator para coger el currentUser.
+    - Ahora usamos ese currentUser y lo usamos cuando creemos el report. ( report.user = currentUser )
+
+- 136:
+    - Nada
+
+- 137:
+    - Vamos a crear un nuevo dto que se llame report.dto.ts.
+    - En este dto vamos a seguir la misma estructura del user.dto.ts asi que ponemos todas las propiedades de un report y le ponemos los decorator que necesiten.
+    - Configuramos el serialize en el controller para que use nuestro creado dto.
+    - En vez de poner el user, vamos a poner solo su id, se va a llamar userId y le vamos a poner el decorator que debamos + Transform(({ obj }) => obj.user.id)
+    - Testeamos
+
+- 138:
+    - Vamos a modificar nuestro report entity y vamos a añadir una propiedad boolean llamada approved, y le vamos a poner { default: false } en el decorator.
+    - Vamos a crear un nuevo route handler, un PATCH ( /reports/:id ) --> Vamos a crear un nuevo dto para este route handler ( un nuevo dto porque solo va a tener un boolean )
+
+- 139:
+    - Mirar cuando haga el 140.
+
+- 140:
+    - Vamos a crear el metodo en el servicio de reports.
+    - const report = await this.repo.findOne({ where: { id: parseInt(id) } } )
+    - if(!report){
+        throw NotFoundException('Report not found')
+    }
+    - report.approved = approved
+    - Actualizar el report con save
+    - Test time!
+    - Arreglar el dto :D
+    - Test again!
+
+- 141:
+    - Nada
+
+- 142:
+    - Vamos a actualizar nuestro user entity con una nueva propiedad ( admin: boolean ) que por defecto sea true
+    - Vamos a crear ahora un admin guard, cogemos el currentuser ( si no hay devolvemos false ), y devolvemos user.admin
+
+- 143:
+    - usamos el admin guard en el patch
+    - Test! --> No funciona
+
+- 144:
+    - Meter pantallazo sobre el flow en el Trello
+
+- 145:
+    - Vamos a crear un nuevo file dentro de users llamado current-user.middleware.ts
+
+        @I jectable()
+    - export class CurrentUserMiddleware implements NestMiddleware {
+        constructor(private usersService: UsersService){}
+
+        async use(request: Request, response: Response, next: NextFunction){
+            const { userId }= request.session || {}
+            if(userId){
+                const user = await this.usersService.getById(userId);
+                // @ts-ignore
+                req.currentUser = user
+            }
+
+            next();
+        }
+    }
+
+    - Ahora en UsersModule, vamos a utiliar el mismo approach que cuando usamos el CookieSession.
+        - configure(.....){
+            consumer.apply(currentusermiddleware).forRoutes('*')
+        }
+
+        - Borramos el currentuserInterceptor, los imports y el archivo en si
+    - Test again it should work!
+
+- 146:
+    - Nada, no importante
+
+- 147:
+    - Vamos a crear un nuevo dto en el que se especifiquen get-estimation.dto.ts que tenga los mismos campos que las de crearReportDto pero sin el precio.
+    - Creamos el route handler.
+    - comprobamos que al probar, nos da un error porque recibimos las cosas como string en vez de como number.
+
+- 148:
+    - En el get estimate, vamos a usar el decorator transform para, en todas las propiedades que sean number, hacer un parseInt(al valor de la request. { value } => parseInt(value))
+    - Para latitude y longitud vamos a hacer parseFloat en vez de parseInt
+    - Comprobamos que todo esta bien ya.
+
+- 149:
+    - Nada
+
+- 150 & 151:
+    - Creamos el metodo en el servicio de reports para obtener los reports.
+    - Dentro del sericio, vamos a hacer lo siguiente:
+        return this.repo.createQueryBuilder(
+                .select('ABV(price)', 'price')
+                .where('make = :make', { make: estimateDto.make })
+                .andWhere('model = :model', { model: estimateDto.model })
+                .andWhere('lng - :lng BETWEEN -5 AND 5', { lng: estimateDto.lng })
+                .andWhere('lat - :lat BETWEEN -5 AND 5', { lat: estimateDto.lat })
+                .andWhere('year - :year BETWEEN -3 AND 3', { lat: estimateDto.year })
+                .andWhere('approved is TRUE')
+                .orderBy('ABS(mileage - :mileage)', 'DESC')
+                .setParameters({ estimateDto.mileage })
+                .limit(3)
+                .getRawOne()
+        )
+
+- 152:
+    - Test
+
+- 153:
+    Nada
+
+- 154:
+    - En el env.development y env.test vamos a añadir un COOKIE=randomstringhere
+    - Vamos a actualizar en el app.module.ts vamos a añadir un constructor: constructor(configService: configService){}
+    - En la config del cookie session cambiamos keys por keys: [this.configService.get('COOKIE')]
+
+CURSO TERMINADO!!!!

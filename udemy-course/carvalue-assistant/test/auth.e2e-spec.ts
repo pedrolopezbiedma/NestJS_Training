@@ -18,7 +18,7 @@ describe('AuthService (e2e)', () => {
   it('/POST handleSignup', () => {
     return request(app.getHttpServer())
       .post('/auth/signup')
-      .send({ email: 'pedrotest2@test.com', password: '12345' })
+      .send({ email: 'pedrotest4@test.com', password: '12345' })
       .expect(201)
       .then((response) => {
         // console.log('response is -->', response)
