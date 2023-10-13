@@ -1,20 +1,4 @@
-- 132:
-    - En el entity de user, vamos a usar el decorator de one to many para crear una propiedad que se llame reports y que sea de topo Report[]
-    - Como parametros para el OneToMany, vamos a usar: OneToMany(() => Report, (report) => report.user)
-    - Ahora vamos a ir al report entity, y vamos a poner un campo nuevo que se llame user: User, con el decorator ManyToOne(() => User, (user) => user.reports)
 
--133:
-    - Borra la base de datos y haz un sign up para crearla de nuevo
-
-- 134:
-    - Nada
-
-- 135:
-    - En el controller, vamos a usar el decorator para coger el currentUser.
-    - Ahora usamos ese currentUser y lo usamos cuando creemos el report. ( report.user = currentUser )
-
-- 136:
-    - Nada
 
 - 137:
     - Vamos a crear un nuevo dto que se llame report.dto.ts.
