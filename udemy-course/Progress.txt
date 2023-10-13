@@ -1,10 +1,3 @@
-- 142:
-    - Vamos a actualizar nuestro user entity con una nueva propiedad ( admin: boolean ) que por defecto sea true
-    - Vamos a crear ahora un admin guard, cogemos el currentuser ( si no hay devolvemos false ), y devolvemos user.admin
-
-- 143:
-    - usamos el admin guard en el patch
-    - Test! --> No funciona
 
 - 144:
     - Meter pantallazo sobre el flow en el Trello
